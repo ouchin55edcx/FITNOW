@@ -40,10 +40,10 @@ class PhysicalProgressController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
 
-     public function getProgressForAuthUser()
+     public function getProgresshistory()
      {
         $user = Auth::user(); 
-        $progress = $user->physicalProgress; 
+        $progress = $user->physicalProgress->sortBy('created_at');
      
         return response()->json($progress);
      }
@@ -65,5 +65,64 @@ class PhysicalProgressController extends Controller
             'message' => 'Progrès physique supprimé avec succès.'
         ], 200);
     }
+
+
+        /**
+     * Met à jour un progrès physique spécifique pour l'utilisateur authentifié
+     *
+     * @param Request $request
+     * @param int $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function updateProgress(Request $request, $id)
+    {
+        $user = Auth::user();
+        $progress = PhysicalProgress::where('user_id', $user->id)->findOrFail($id);
+
+        $request->validate([
+            'weight' => 'nullable|numeric',
+            'measurements' => 'nullable|numeric',
+            'sports_performance' => 'nullable|string',
+        ]);
+
+        $progress->weight = $request->input('weight', $progress->weight);
+        $progress->measurements = $request->input('measurements', $progress->measurements);
+        $progress->sports_performance = $request->input('sports_performance', $progress->sports_performance);
+
+        $progress->save();
+
+        return response()->json($progress, 200);
+    }
+
+
+
+
+        /**
+     * Met à jour le statut d'un progrès physique spécifique pour l'utilisateur authentifié
+     *
+     * @param Request $request
+     * @param int $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function updateProgressStatus(Request $request, $id)
+    {
+        $user = Auth::user();
+        $progress = PhysicalProgress::where('user_id', $user->id)->findOrFail($id);
+
+        $request->validate([
+            'status' => 'required|in:Pending,Completed',
+        ]);
+
+        $progress->status = $request->input('status');
+        $progress->save();
+
+        return response()->json($progress, 200);
+    }
+    
+
+
+
+
+    
      
 }

@@ -31,9 +31,13 @@ Route::post('logout',[AuthController::class,'logout'])
 });
 
 Route::middleware('auth:sanctum')->group(function () {
-  Route::get('/progress/user', [PhysicalProgressController::class, 'getProgressForAuthUser']);
+  Route::get('/progress/history', [PhysicalProgressController::class, 'getProgresshistory']);
 });
 
 Route::middleware('auth:sanctum')->group(function () {
   Route::delete('/progress/{id}', [PhysicalProgressController::class, 'deleteProgress']);
+});
+
+Route::middleware('auth:sanctum')->group(function () {
+  Route::patch('/progress/{id}/status', [PhysicalProgressController::class, 'updateProgressStatus']);
 });
