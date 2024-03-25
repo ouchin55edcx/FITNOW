@@ -33,3 +33,7 @@ Route::post('logout',[AuthController::class,'logout'])
 Route::middleware('auth:sanctum')->group(function () {
   Route::get('/progress/user', [PhysicalProgressController::class, 'getProgressForAuthUser']);
 });
+
+Route::middleware('auth:sanctum')->group(function () {
+  Route::delete('/progress/{id}', [PhysicalProgressController::class, 'deleteProgress']);
+});

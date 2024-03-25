@@ -47,5 +47,23 @@ class PhysicalProgressController extends Controller
      
         return response()->json($progress);
      }
+
+
+
+    /**
+     * Supprime un progrès physique spécifique pour l'utilisateur authentifié
+     *
+     * @param int $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function deleteProgress($id)
+    {
+        $user = Auth::user();
+        $progress = PhysicalProgress::where('user_id', $user->id)->findOrFail($id);
+        $progress->delete();
+        return response()->json([
+            'message' => 'Progrès physique supprimé avec succès.'
+        ], 200);
+    }
      
 }
