@@ -28,16 +28,8 @@ Route::post('logout',[AuthController::class,'logout'])
 
   Route::middleware('auth:sanctum')->group(function () {
     Route::post('/progress', [PhysicalProgressController::class, 'store']);
-});
-
-Route::middleware('auth:sanctum')->group(function () {
-  Route::get('/progress/history', [PhysicalProgressController::class, 'getProgresshistory']);
-});
-
-Route::middleware('auth:sanctum')->group(function () {
-  Route::delete('/progress/{id}', [PhysicalProgressController::class, 'deleteProgress']);
-});
-
-Route::middleware('auth:sanctum')->group(function () {
-  Route::patch('/progress/{id}/status', [PhysicalProgressController::class, 'updateProgressStatus']);
+    Route::get('/progress', [PhysicalProgressController::class, 'getProgresshistory']);
+    Route::put('/progress/{id}', [PhysicalProgressController::class, 'update']);
+    Route::patch('/progress/{id}/status', [PhysicalProgressController::class, 'updateStatus']);
+    Route::delete('/progress/{id}', [PhysicalProgressController::class, 'destroy']);
 });

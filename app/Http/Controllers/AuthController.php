@@ -23,7 +23,7 @@ class AuthController extends Controller
             'password' => Hash::make($registerUserData['password']),
         ]);
         return response()->json([
-            'message' => 'User Created ',
+            'message' => 'User registred ',
         ]);
     }
 
@@ -41,7 +41,9 @@ class AuthController extends Controller
         $token = $user->createToken($user->name.'-AuthToken')->plainTextToken;
         return response()->json([
             'access_token' => $token,
+            'message' => 'User login'
         ]);
+        
     }
 
     public function logout(){

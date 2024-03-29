@@ -17,9 +17,9 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->float('weight');
-            $table->float('measurements');
-            $table->string('sports_performance');
+            $table->float('weight')->nullable();
+            $table->float('measurements')->nullable();
+            $table->string('sports_performance')->nullable();
             $table->string('status')->default('Pending');
             $table->timestamps();
         });

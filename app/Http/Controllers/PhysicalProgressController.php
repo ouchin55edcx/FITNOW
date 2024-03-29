@@ -8,73 +8,68 @@ use Illuminate\Support\Facades\Auth;
 
 class PhysicalProgressController extends Controller
 {
-    // Méthode pour créer un nouveau progrès
+    // Method to create a new progress
     public function store(Request $request)
     {
-        // Validation des données envoyées
+        // Validate the sent data
         $validatedData = $request->validate([
             'weight' => 'required|numeric',
             'measurements' => 'required|numeric',
             'sports_performance' => 'required|string',
         ]);
 
-        // Récupération de l'utilisateur authentifié
+        // Get the authenticated user
         $user = Auth::user();
 
-        // Création d'un nouveau progrès physique
+        // Create a new physical progress
         $progress = new PhysicalProgress();
         $progress->weight = $validatedData['weight'];
         $progress->measurements = $validatedData['measurements'];
         $progress->sports_performance = $validatedData['sports_performance'];
-        $progress->user_id = $user->id; // Associer l'utilisateur au progrès
+        $progress->user_id = $user->id; // Associate the user with the progress
         $progress->save();
 
-        // Réponse JSON avec le nouveau progrès créé
+        // JSON response with the newly created progress
         return response()->json($progress, 201);
     }
 
-
     /**
-     * Récupère tous les progrès physiques de l'utilisateur authentifié
+     * Retrieve all physical progress for the authenticated user
      *
      * @return \Illuminate\Http\JsonResponse
      */
-
-     public function getProgresshistory()
-     {
-        $user = Auth::user(); 
-        $progress = $user->physicalProgress->sortBy('created_at');
-     
-        return response()->json($progress);
-     }
-
-
+    public function getProgresshistory()
+    {
+       $user = Auth::user(); 
+       $progress = $user->physicalProgress->sortBy('created_at');
+    
+       return response()->json($progress);
+    }
 
     /**
-     * Supprime un progrès physique spécifique pour l'utilisateur authentifié
+     * Delete a specific physical progress for the authenticated user
      *
      * @param int $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function deleteProgress($id)
+    public function destroy($id)
     {
         $user = Auth::user();
         $progress = PhysicalProgress::where('user_id', $user->id)->findOrFail($id);
         $progress->delete();
         return response()->json([
-            'message' => 'Progrès physique supprimé avec succès.'
+            'message' => 'Physical progress deleted successfully.'
         ], 200);
     }
 
-
-        /**
-     * Met à jour un progrès physique spécifique pour l'utilisateur authentifié
+    /**
+     * Update a specific physical progress for the authenticated user
      *
      * @param Request $request
      * @param int $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function updateProgress(Request $request, $id)
+    public function update(Request $request, $id)
     {
         $user = Auth::user();
         $progress = PhysicalProgress::where('user_id', $user->id)->findOrFail($id);
@@ -94,17 +89,14 @@ class PhysicalProgressController extends Controller
         return response()->json($progress, 200);
     }
 
-
-
-
-        /**
-     * Met à jour le statut d'un progrès physique spécifique pour l'utilisateur authentifié
+    /**
+     * Update the status of a specific physical progress for the authenticated user
      *
      * @param Request $request
      * @param int $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function updateProgressStatus(Request $request, $id)
+    public function updateStatus(Request $request, $id)
     {
         $user = Auth::user();
         $progress = PhysicalProgress::where('user_id', $user->id)->findOrFail($id);
@@ -118,11 +110,4 @@ class PhysicalProgressController extends Controller
 
         return response()->json($progress, 200);
     }
-    
-
-
-
-
-    
-     
 }
